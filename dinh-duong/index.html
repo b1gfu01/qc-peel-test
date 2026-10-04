@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0f766e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Dinh dưỡng của Phước</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1 id="appTitle">Dinh dưỡng</h1>
+  </header>
+
+  <main>
+    <!-- ===== HÔM NAY ===== -->
+    <section id="tab-today" class="tab active">
+      <div class="datenav">
+        <button class="icon-btn" data-day-shift="-1" aria-label="Ngày trước">‹</button>
+        <input type="date" id="dayPicker">
+        <button class="icon-btn" data-day-shift="1" aria-label="Ngày sau">›</button>
+      </div>
+
+      <div id="daySummary" class="card summary"></div>
+
+      <label class="train-toggle card">
+        <input type="checkbox" id="trainedToggle">
+        <span>🥊 Hôm nay có tập</span>
+      </label>
+
+      <div id="dayAlerts"></div>
+
+      <div id="mealList"></div>
+
+      <p class="principle">Calo quyết định cân nặng, macro quyết định cân đó là mỡ hay cơ. Giữ thâm hụt nhẹ + đủ đạm là chìa khoá.</p>
+    </section>
+
+    <!-- ===== CÂN NẶNG ===== -->
+    <section id="tab-weight" class="tab">
+      <div id="weightStats" class="card"></div>
+
+      <form id="weightForm" class="card form">
+        <h2>Nhập cân</h2>
+        <div class="grid2">
+          <label>Ngày<input type="date" id="wDate" required></label>
+          <label>Cân nặng (kg)<input type="number" id="wKg" step="0.1" inputmode="decimal" required></label>
+          <label>% mỡ (tuỳ chọn)<input type="number" id="wBf" step="0.1" inputmode="decimal"></label>
+          <label>Vòng eo cm (tuỳ chọn)<input type="number" id="wWaist" step="0.5" inputmode="decimal"></label>
+        </div>
+        <button class="btn primary" type="submit">Lưu</button>
+      </form>
+
+      <div class="card">
+        <h2>Xu hướng</h2>
+        <div id="weightChart" class="chart"></div>
+        <div class="legend"><span class="dot dot-raw"></span>Cân từng ngày <span class="dot dot-avg"></span>Trung bình 7 ngày</div>
+      </div>
+
+      <p class="note">⚖️ Cân cùng điều kiện mỗi sáng, cùng 1 cân. Nước/muối/bệnh/stress làm cân nhích tạm, <b>không phải mỡ</b>. Nhìn trung bình 7 ngày.</p>
+
+      <div class="card">
+        <h2>Lịch sử</h2>
+        <div id="weightList"></div>
+      </div>
+    </section>
+
+    <!-- ===== TỔNG KẾT TUẦN ===== -->
+    <section id="tab-week" class="tab">
+      <div class="datenav">
+        <button class="icon-btn" data-week-shift="-1" aria-label="Tuần trước">‹</button>
+        <div id="weekLabel" class="week-label"></div>
+        <button class="icon-btn" data-week-shift="1" aria-label="Tuần sau">›</button>
+      </div>
+      <div id="weekReport"></div>
+      <p class="principle">Giảm mỡ tính bằng <b>trung bình cả tuần</b>, không phải từng ngày. Một bữa ăn nhiều không phá kế hoạch.</p>
+    </section>
+
+    <!-- ===== CÀI ĐẶT ===== -->
+    <section id="tab-settings" class="tab">
+      <form id="settingsForm" class="card form">
+        <h2>Hồ sơ & mục tiêu</h2>
+        <div class="grid2" id="settingsFields"></div>
+        <button class="btn primary" type="submit">Lưu cài đặt</button>
+      </form>
+
+      <div class="card">
+        <h2>Thư viện món</h2>
+        <input type="search" id="libSearch" placeholder="Tìm món…">
+        <button class="btn" id="libAddBtn" type="button">+ Thêm món vào thư viện</button>
+        <div id="libList"></div>
+      </div>
+
+      <div class="card">
+        <h2>Sao lưu dữ liệu</h2>
+        <p class="muted">Dữ liệu lưu trong trình duyệt này. Nên xuất file định kỳ để không mất.</p>
+        <div class="row-btns">
+          <button class="btn" id="exportBtn" type="button">⬇️ Xuất JSON</button>
+          <button class="btn" id="exportCsvBtn" type="button">⬇️ Xuất CSV</button>
+          <label class="btn">⬆️ Nhập JSON<input type="file" id="importFile" accept="application/json,.json" hidden></label>
+        </div>
+        <button class="btn danger" id="resetBtn" type="button">Xoá toàn bộ dữ liệu</button>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tabbar">
+    <button data-tab="today" class="active"><span>🍽️</span>Hôm nay</button>
+    <button data-tab="weight"><span>⚖️</span>Cân nặng</button>
+    <button data-tab="week"><span>📊</span>Tổng kết</button>
+    <button data-tab="settings"><span>⚙️</span>Cài đặt</button>
+  </nav>
+
+  <!-- Hộp thoại thêm món vào bữa -->
+  <dialog id="addDialog">
+    <form method="dialog" class="dlg">
+      <div class="dlg-head">
+        <h2 id="addTitle">Thêm món</h2>
+        <button type="button" class="icon-btn" data-close aria-label="Đóng">✕</button>
+      </div>
+      <input type="search" id="foodSearch" placeholder="Gõ tên món… (vd: xúc xích, phở)" autocomplete="off">
+      <div id="foodSuggest" class="suggest"></div>
+
+      <div id="pickedBox" class="picked" hidden>
+        <div id="pickedName" class="picked-name"></div>
+        <div class="qty">
+          <button type="button" class="icon-btn" id="qtyMinus">−</button>
+          <input type="number" id="qtyInput" step="0.5" min="0.5" value="1" inputmode="decimal">
+          <button type="button" class="icon-btn" id="qtyPlus">+</button>
+          <span class="muted">phần</span>
+        </div>
+        <div id="pickedTotal" class="picked-total"></div>
+        <button type="button" class="btn primary" id="confirmAdd">Thêm vào bữa</button>
+      </div>
+
+      <details id="newFoodBox">
+        <summary>➕ Món mới chưa có trong thư viện</summary>
+        <div class="grid2">
+          <label class="span2">Tên món<input type="text" id="nfName"></label>
+          <label>Calo (kcal)<input type="number" id="nfKcal" inputmode="numeric"></label>
+          <label>Đạm (g)<input type="number" id="nfProtein" step="0.5" inputmode="decimal"></label>
+        </div>
+        <button type="button" class="btn primary" id="nfAdd">Lưu vào thư viện & thêm</button>
+      </details>
+    </form>
+  </dialog>
+
+  <!-- Hộp thoại sửa món thư viện -->
+  <dialog id="libDialog">
+    <form method="dialog" class="dlg" id="libForm">
+      <div class="dlg-head">
+        <h2 id="libDlgTitle">Sửa món</h2>
+        <button type="button" class="icon-btn" data-close aria-label="Đóng">✕</button>
+      </div>
+      <div class="grid2">
+        <label class="span2">Tên món<input type="text" id="lfName" required></label>
+        <label>Calo (kcal)<input type="number" id="lfKcal" required inputmode="numeric"></label>
+        <label>Đạm (g)<input type="number" id="lfProtein" step="0.5" required inputmode="decimal"></label>
+        <label class="span2">Nhóm<select id="lfCat"></select></label>
+      </div>
+      <button class="btn primary" value="save">Lưu</button>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -17,6 +17,7 @@ const DEFAULT_SETTINGS = {
   goalBodyFat: '15–18',
   minKcal: 1500,
   lunchProteinMin: 35,
+  waterTarget: 8, // số ly 250ml/ngày
 };
 
 // Mỗi món: [tên, kcal, đạm (g), nhóm]
@@ -77,4 +78,70 @@ const MEALS = [
   { key: 'xe', label: 'Xế', icon: '🍌' },
   { key: 'toi', label: 'Tối', icon: '🌙' },
   { key: 'phu', label: 'Phụ / khuya', icon: '🍪' },
+];
+
+// Icon tự động theo tên món (so khớp trên chữ đã bỏ dấu, theo thứ tự ưu tiên)
+const ICON_RULES = [
+  [/\bca phe\b|\bcafe\b|coffee/, '☕'],
+  [/\btra sua\b|\btra\b/, '🧋'],
+  [/\bbanh mi\b/, '🥖'],
+  [/\bbanh bao\b/, '🥟'],
+  [/\bxoi\b/, '🍙'],
+  [/\bcom (chien|suon|tam|ga)\b/, '🍛'],
+  [/\bcom\b/, '🍚'],
+  [/\bchao\b|yen mach|ngu coc/, '🥣'],
+  [/\bpho\b(?! mai)|hu tieu|\bbun\b|udon|banh canh|\bmi\b|\bmien\b/, '🍜'],
+  [/\blau\b/, '🍲'],
+  [/\btacos?\b/, '🌮'],
+  [/pizza/, '🍕'],
+  [/burger/, '🍔'],
+  [/xuc xich/, '🌭'],
+  [/\btom\b/, '🍤'],
+  [/\bca\b|\bluon\b/, '🐟'],
+  [/\bga\b/, '🍗'],
+  [/\btrung\b/, '🥚'],
+  [/\bsua\b|whey/, '🥛'],
+  [/\bthit\b|\bsuon\b|\bbo\b|\bde\b|\bheo\b/, '🥩'],
+  [/\bchuoi\b/, '🍌'],
+  [/\btao\b/, '🍎'],
+  [/\bcam\b/, '🍊'],
+  [/\bquay\b/, '🥨'],
+  [/\brau\b|bap cai|salad|\bcai\b/, '🥬'],
+  [/\bkhoai\b/, '🍠'],
+  [/\bbia\b/, '🍺'],
+  [/nuoc ngot|coca|pepsi|\bsting\b/, '🥤'],
+  [/\bbanh\b/, '🍰'],
+];
+
+const CATEGORY_ICONS = {
+  'Bữa sáng': '🍳', 'Cơm & tinh bột': '🍚', 'Đạm chính': '🍗', 'Món nước': '🍜',
+  'Ăn chơi': '🍟', 'Rau': '🥬', 'Món tự thêm': '🍽️',
+};
+
+const EMOJI_CHOICES = ['🍳', '🥖', '🥟', '🍙', '🍚', '🍛', '🍜', '🍲', '🥣', '🍗', '🥩', '🐟', '🍤', '🥚', '🌭', '🥛',
+  '🥬', '🥗', '🍌', '🍎', '🍊', '🌮', '🍕', '🍔', '🍟', '🥨', '🍰', '☕', '🧋', '🥤', '🍺', '🍽️'];
+
+const FEELINGS = [
+  { key: 'met', icon: '😴', label: 'Mệt' },
+  { key: 'thuong', icon: '😐', label: 'Bình thường' },
+  { key: 'on', icon: '🙂', label: 'Ổn' },
+  { key: 'sung', icon: '💪', label: 'Sung' },
+];
+
+// Mẹo của Fu — đổi mỗi ngày
+const TIPS = [
+  'Calo quyết định cân nặng, macro quyết định cân đó là mỡ hay cơ. Giữ thâm hụt nhẹ + đủ đạm là chìa khoá.',
+  'Giảm mỡ tính bằng trung bình cả tuần, không phải từng ngày. Một bữa ăn nhiều không phá kế hoạch.',
+  'Đừng ăn dưới 1.500 kcal — thâm hụt quá sâu sẽ mất cơ, tụt chuyển hoá.',
+  'Bữa trưa là điểm yếu: bỏ sẵn 2–3 cây xúc xích ức gà hoặc 2 trứng luộc vào túi trước khi đi làm.',
+  'Cân dao động do nước, muối, bệnh, stress — không phải mỡ. Nhìn trung bình 7 ngày.',
+  'Ngày tập nên ăn đủ ~2.100 kcal, đừng để hụt sâu — thiếu xăng thì hồi phục kém.',
+  'Chia đạm đều 3–4 bữa (30–40g/bữa) tốt cho giữ cơ hơn là dồn hết vào bữa tối.',
+  'Ăn món nước: bỏ nước béo, bỏ đồ chiên là tiết kiệm được 100–200 kcal mà vẫn no.',
+  'Ăn rau và đạm trước, tinh bột sau — no lâu hơn, đỡ thèm vặt buổi xế.',
+  'Khát hay bị nhầm thành đói. Uống 1 ly nước trước khi quyết định ăn thêm.',
+  'Ngủ đủ 7–8 tiếng: thiếu ngủ làm tăng thèm ăn và giảm hồi phục sau boxing.',
+  'Không cắt ăn cực đoan để giảm nhanh. Chậm mà giữ được cơ mới là recomp.',
+  'Cân mỗi sáng sau khi đi vệ sinh, trước khi ăn uống, cùng 1 cân Crenot.',
+  'Sữa cao đạm không đường là cách bù đạm nhanh nhất: 1 hộp ~12g đạm, 135 kcal.',
 ];

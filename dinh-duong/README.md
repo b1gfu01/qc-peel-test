@@ -17,8 +17,18 @@ Cách khác (cùng mạng Wi-Fi): trong thư mục `dinh-duong` chạy `python3 
 ## Cấu trúc
 - `index.html` — giao diện 4 tab: Hôm nay | Cân nặng | Tổng kết | Cài đặt
 - `style.css` — giao diện mobile-first, tự đổi theo chế độ sáng/tối
-- `data.js` — hồ sơ mặc định + thư viện món nạp sẵn
+- `data.js` — hồ sơ mặc định, thư viện món, quy tắc icon món, mẹo hằng ngày
 - `app.js` — toàn bộ logic
+- `manifest.json`, `icon*.png`, `icon.svg` — icon khi "Thêm vào màn hình chính"
+
+## Bản 2 (giao diện mới)
+- Vòng calo kiểu Lifesum/Yazio, thanh lịch tuần có chấm màu từng ngày, chuỗi ngày ghi liên tục 🔥.
+- Icon cho từng món (tự đoán theo tên, chỉnh được trong Cài đặt → Thư viện).
+- Gợi ý bù đạm khi còn thiếu, nút "Giống hôm trước" cho từng bữa, sửa món dạng bottom sheet (đổi số lượng, chuyển bữa, xoá).
+- Nhật ký ngày: nước uống, có tập, cảm giác, ghi chú.
+- Tổng kết tuần có biểu đồ cột calo và tổng hợp ghi chú.
+
+**Dữ liệu:** bản 2 dùng nguyên khoá `dinhduong-phuoc-v1` và cấu trúc cũ, chỉ thêm trường tuỳ chọn (`water`, `feel`, `note`, `emoji`, `waterTarget`). Lần đầu mở, app tự chép dữ liệu cũ sang khoá `dinhduong-phuoc-v1-truoc-v2` để có thể khôi phục trong Cài đặt.
 
 ## Ghi chú
 - Gõ tìm món không cần dấu (vd `xuc xich`, `pho`).
